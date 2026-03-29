@@ -1,0 +1,25 @@
+page_name: Disobedient Summons
+page_description: Summons might switch sides based on your (and your opponents) conjuration and luck.
+
+settings_groupName: Settings
+settings_groupDesc: |
+  Summon spawns as disobedient if:
+  random[0, 100) < BaseChance + SummonerLuck * LuckMod
+baseChance_name: Base Chance
+luckMod_name: Luck Modifier
+conjurationDifference_name: Conjuration Difference
+conjurationDifference_desc: >
+  How much more conjuration skill an actor needs
+  for disobedient summon to switch to his side.
+creatureConjurationSkill_name: Creature Conjuration Skill
+creatureConjurationSkill_desc: >
+  Since creatures don't have skills, this value will be used instead.
+  Usually, creatures capable of summoning are quite powerful
+  and are either undead or daedra themselves.
+maxDistance_name: Max Distance
+maxDistance_desc: >
+  Maximum distance between summon and potential new master
+  for summon to consider switching sides.
+enableMessages_name: Enable Messages
+
+msg_disobeyed: Seems like {summon} disobeyed and started following {master}!

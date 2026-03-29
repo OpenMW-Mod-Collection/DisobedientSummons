@@ -1,0 +1,5 @@
+GLOBAL: scripts/DisobedientSummons/global.lua
+CUSTOM: scripts/DisobedientSummons/creature.lua
+
+MENU: scripts/DisobedientSummons/settingsMenu.lua
+GLOBAL: scripts/DisobedientSummons/settingsGlobal.lua
