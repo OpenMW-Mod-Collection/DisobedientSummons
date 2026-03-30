@@ -6,11 +6,13 @@ _For MWSE alternative check [Disobedient Summons - MWSE](https://www.nexusmods.c
 
 ## Features
 
-Any summon now has a chance to spawn as **disobedient**. If disobedient summon senses anyone more powerful nearby, they won't think long and will switch sides given the opportunity.
+Any summon now has a chance to spawn as **disobedient**. If they sense anyone more powerful than their summoner nearby, they won't think long before switching sides given the opportunity.
 
 Chance for summon to spawn disobedient:
 
 > random[0, 100) < BaseChance + SummonerLuck * LuckMod
+
+And yes, it affects enemies too >:)
 
 ## Compatibility
 
