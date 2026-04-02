@@ -32,7 +32,7 @@ I.Settings.registerGroup {
             name = 'ignoreCreatureSummoners_name',
             description = 'ignoreCreatureSummoners_desc',
             renderer = 'checkbox',
-            default = true,
+            default = false,
         },
         {
             key = 'conjurationDifference',
