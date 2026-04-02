@@ -24,8 +24,9 @@ I.AI.forEachPackage(function(pkg)
     end
 end)
 
--- just in case
-if not summoner then
+if not summoner
+    or (types.Creature.objectIsInstance(summoner) and settings:get("ignoreCreatureSummoners"))
+then
     return
 end
 

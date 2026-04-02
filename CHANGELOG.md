@@ -1,5 +1,9 @@
 # Disobedient Summons (OpenMW)
 
+## 1.2
+
+- Added option for summons summoned by creatures to never get disobedient
+
 ## 1.1
 
 - Added proper creature summoner support

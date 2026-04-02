@@ -8,6 +8,11 @@ settings_groupDesc: |
 baseChance_name: Base Chance
 luckMod_name: Luck Modifier
 willpowerMod_name: Willpower Modifier
+ignoreCreatureSummoners_name: Skip Summons Summoned by Creatures
+ignoreCreatureSummoners_desc: |
+  If enabled, summons summoned by creatures won't get disobedient.
+
+  Intended for scenarios where undead are summoned by undead or daedra are summoned by daedra to whom they might be more loyal than a mere mortal.
 conjurationDifference_name: Conjuration Difference
 conjurationDifference_desc: >
   How much more conjuration skill an actor needs

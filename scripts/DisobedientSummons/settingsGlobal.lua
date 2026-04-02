@@ -28,6 +28,13 @@ I.Settings.registerGroup {
             default = -.10,
         },
         {
+            key = 'ignoreCreatureSummoners',
+            name = 'ignoreCreatureSummoners_name',
+            description = 'ignoreCreatureSummoners_desc',
+            renderer = 'checkbox',
+            default = true,
+        },
+        {
             key = 'conjurationDifference',
             name = 'conjurationDifference_name',
             description = 'conjurationDifference_desc',
