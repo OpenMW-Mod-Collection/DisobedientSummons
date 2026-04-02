@@ -5,15 +5,18 @@ local types = require("openmw.types")
 local self = require("openmw.self")
 local core = require("openmw.core")
 
+require("scripts.DisobedientSummons.logic.checks")
+
 local settings = storage.globalSection("SettingsDisobedientSummons")
 local l10n = core.l10n("DisobedientSummons")
 local toScan = { nearby.actors, nearby.players }
+local cooldown = 1
 
 local summoner
+local newSummonerCandidate
+local newSummonerCandidateConj = 0
 local deltaTime = 0
-local cooldown = 1
 local pendingActors = {}
-local message
 
 I.AI.forEachPackage(function(pkg)
     if (pkg.type == "Follow" or pkg.type == "Escort") and pkg.target and pkg.target:isValid() then
@@ -26,33 +29,60 @@ if not summoner then
     return
 end
 
-local luck = summoner.type.stats.attributes.luck(summoner)
+local attrs = summoner.type.stats.attributes
+local luck = attrs.luck(summoner)
+local willpower = attrs.willpower(summoner)
 local disobedientChance = settings:get("baseChance")
     + luck.modified * settings:get("luckMod")
+    + willpower.modified * settings:get("willpowerMod")
 
 -- obedience check
 if math.random() * 100 > disobedientChance then
     return
 end
 
+local function switchSummoner()
+    I.AI.startPackage({
+        type = "Follow",
+        target = newSummonerCandidate,
+        cancelOther = true,
+    })
+    summoner = newSummonerCandidate
+
+    if settings:get("enableMessages") then
+        local selfName = self.type.records[self.recordId].name
+        local summonerName = summoner.type == types.Player
+            and "you"
+            or summoner.type.records[summoner.recordId].name
+        local message = l10n(
+            "msg_disobeyed",
+            { summon = selfName, master = summonerName }
+        )
+        for _, player in ipairs(nearby.players) do
+            player:sendEvent(
+                "ShowMessage",
+                { message = message }
+            )
+        end
+    end
+    
+
+    newSummonerCandidate = nil
+    newSummonerCandidateConj = 0
+end
+
 local function onUpdate(dt)
     deltaTime = deltaTime + dt
     if #pendingActors == 0 then
-        if message then
-            for _, player in ipairs(nearby.players) do
-                player:sendEvent(
-                    "ShowMessage",
-                    { message = message }
-                )
-            end
-            message = nil
-        end
-
         if deltaTime < cooldown then
             return
         end
 
         deltaTime = 0
+
+        if newSummonerCandidate then
+            switchSummoner()
+        end
 
         for _, objects in ipairs(toScan) do
             for _, obj in ipairs(objects) do
@@ -62,40 +92,19 @@ local function onUpdate(dt)
     end
 
     local currActor = table.remove(pendingActors)
-    if currActor.type ~= types.NPC
-        or currActor == summoner
-        or (self.position - currActor.position):length() > settings:get("maxDistance")
+
+    if not ValidSummoner(currActor, summoner, self.position, settings:get("maxDistance"))
+        or not SkillCheck(settings, currActor, summoner)
     then
         return
     end
 
-    local conjuration = types.NPC.stats.skills.conjuration
-    local actorConj = types.NPC.objectIsInstance(currActor)
-        and conjuration(currActor).modified
+    local currActorConj = types.NPC.objectIsInstance(currActor)
+        and currActor.type.stats.skills.conjuration(currActor).modified
         or settings:get("creatureConjurationSkill")
-    local summonerConj = types.NPC.objectIsInstance(summoner)
-        and conjuration(summoner).modified
-        or settings:get("creatureConjurationSkill")
-    if actorConj - summonerConj < settings:get("conjurationDifference") then
-        return
-    end
-
-    I.AI.startPackage({
-        type = "Follow",
-        target = currActor,
-        cancelOther = true,
-    })
-    summoner = currActor
-
-    if settings:get("enableMessages") then
-        local selfName = self.type.records[self.recordId].name
-        local summonerName = summoner.type == types.Player
-            and "you"
-            or summoner.type.records[summoner.recordId].name
-        message = l10n(
-            "msg_disobeyed",
-            { summon = selfName, master = summonerName }
-        )
+    if currActorConj > newSummonerCandidateConj then
+        newSummonerCandidate = currActor
+        newSummonerCandidateConj = currActorConj
     end
 end
 

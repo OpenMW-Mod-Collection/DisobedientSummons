@@ -13,11 +13,17 @@ I.Settings.registerGroup {
             key = 'baseChance',
             name = 'baseChance_name',
             renderer = 'number',
-            default = 20,
+            default = 35,
         },
         {
             key = 'luckMod',
             name = 'luckMod_name',
+            renderer = 'number',
+            default = -.10,
+        },
+        {
+            key = 'willpowerMod',
+            name = 'willpowerMod_name',
             renderer = 'number',
             default = -.10,
         },
