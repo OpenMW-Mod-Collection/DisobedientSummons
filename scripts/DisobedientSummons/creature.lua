@@ -24,21 +24,7 @@ I.AI.forEachPackage(function(pkg)
     end
 end)
 
-if not summoner
-    or (types.Creature.objectIsInstance(summoner) and settings:get("ignoreCreatureSummoners"))
-then
-    return
-end
-
-local attrs = summoner.type.stats.attributes
-local luck = attrs.luck(summoner)
-local willpower = attrs.willpower(summoner)
-local disobedientChance = settings:get("baseChance")
-    + luck.modified * settings:get("luckMod")
-    + willpower.modified * settings:get("willpowerMod")
-
--- obedience check
-if math.random() * 100 > disobedientChance then
+if not IsDisobedient(summoner, self) then
     return
 end
 
@@ -94,8 +80,8 @@ local function onUpdate(dt)
 
     local currActor = table.remove(pendingActors)
 
-    if not ValidSummoner(currActor, summoner, self.position, settings:get("maxDistance"))
-        or not SkillCheck(settings, currActor, summoner)
+    if not ValidSummoner(currActor, summoner, self.position)
+        or not SkillCheck(currActor, summoner)
     then
         return
     end

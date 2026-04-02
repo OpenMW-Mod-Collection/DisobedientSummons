@@ -1,7 +1,41 @@
 local types = require("openmw.types")
 local core = require("openmw.core")
+local storage = require("openmw.storage")
 
 require("scripts.DisobedientSummons.utils.consts")
+
+local settings = storage.globalSection("SettingsDisobedientSummons")
+
+function IsDisobedient(summoner, self)
+    if not summoner then
+        return false
+    end
+
+    local attrs = summoner.type.stats.attributes
+    local luck = attrs.luck(summoner)
+    local willpower = attrs.willpower(summoner)
+    local disobedientChance = settings:get("baseChance")
+        + luck.modified * settings:get("luckMod")
+        + willpower.modified * settings:get("willpowerMod")
+
+    -- obedience check
+    if math.random() * 100 > disobedientChance then
+        return false
+    end
+
+    if types.Creature.objectIsInstance(summoner)
+        and not settings:get("ignoreCreatureSummoners")
+    then
+        local records = types.Creature.records
+        local selfType = records[self.recordId].type
+        local summonerType = records[summoner.recordId].type
+        if selfType == summonerType then
+            return false
+        end
+    end
+
+    return true
+end
 
 local function isSummoner(currActor)
     local spells = currActor.type.spells(currActor)
@@ -16,9 +50,9 @@ local function isSummoner(currActor)
     return false
 end
 
-function ValidSummoner(currActor, summoner, selfPos, maxDistance)
+function ValidSummoner(currActor, summoner, selfPos)
     if currActor == summoner
-        or (selfPos - currActor.position):length() > maxDistance
+        or (selfPos - currActor.position):length() > settings:get("maxDistance")
     then
         return false
     end
@@ -30,7 +64,7 @@ function ValidSummoner(currActor, summoner, selfPos, maxDistance)
     end
 end
 
-function SkillCheck(settings, currActor, summoner)
+function SkillCheck(currActor, summoner)
     local conjuration = types.NPC.stats.skills.conjuration
     local actorConj = types.NPC.objectIsInstance(currActor)
         and conjuration(currActor).modified

@@ -1,5 +1,9 @@
 # Disobedient Summons (OpenMW)
 
+## 1.2.1
+
+- Changed "Skip Summons Summoned by Creatures" setting to give benefit only to the creatures and summoners of the same cerature type. For example, undead-undead or daedra-daedra
+
 ## 1.2
 
 - Added option for summons summoned by creatures to never get disobedient
