@@ -10,7 +10,7 @@ Any summon now has a chance to spawn as **disobedient**. If they sense anyone mo
 
 Chance for summon to spawn disobedient:
 
-> random[0, 100) < BaseChance + SummonerLuck * LuckMod
+> random[0, 100) < BaseChance + SummonerLuck * LuckMod + SummonerWillpower * WillpowerMod
 
 And yes, it affects enemies too >:)
 

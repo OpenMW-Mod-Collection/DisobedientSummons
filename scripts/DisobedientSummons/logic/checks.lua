@@ -53,6 +53,7 @@ end
 function ValidSummoner(currActor, summoner, selfPos)
     if currActor == summoner
         or (selfPos - currActor.position):length() > settings:get("maxDistance")
+        or currActor.type.isDead(currActor)
     then
         return false
     end

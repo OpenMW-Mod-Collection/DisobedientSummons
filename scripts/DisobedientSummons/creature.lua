@@ -67,7 +67,10 @@ local function onUpdate(dt)
 
         deltaTime = 0
 
-        if newSummonerCandidate then
+        if newSummonerCandidate
+            -- in case summoner has changed by this point
+            and I.AI.getActiveTarget("Follow") == summoner
+        then
             switchSummoner()
         end
 

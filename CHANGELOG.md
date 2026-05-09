@@ -1,5 +1,10 @@
 # Disobedient Summons (OpenMW)
 
+## 1.2.2
+
+- Fixed summons being able to follow dead actors
+- Improved compatibility with other mods which play with actor Follow AI package
+
 ## 1.2.1
 
 - Changed "Skip Summons Summoned by Creatures" setting to give benefit only to the creatures and summoners of the same cerature type. For example, undead-undead or daedra-daedra
